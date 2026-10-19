@@ -25,7 +25,7 @@ function ensure() {
         ...DEFAULT,
         payload: typeof saved.payload === "string" ? saved.payload : DEFAULT.payload,
         language:
-          language === "elixir" || language === "python" || language === "nodejs" || language === "odin"
+          language === "elixir" || language === "python" || language === "nodejs" || language === "bun" || language === "odin"
             ? language
             : DEFAULT.language,
         outcome: outcome === "frame" || outcome === "close" || outcome === "error" ? outcome : DEFAULT.outcome,

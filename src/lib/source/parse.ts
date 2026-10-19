@@ -29,6 +29,8 @@ export function parseSource(language: Language, files: SourceFiles | null | unde
         return { ...DEFAULT_CONFIG, acceptors: num(/BACKLOG\s*=\s*(\d+)/), prefix: str(/PREFIX\s*=\s*"([^"]*)"/, DEFAULT_CONFIG.prefix), port };
       case "nodejs":
         return { ...DEFAULT_CONFIG, acceptors: num(/maxConnections\s*=\s*(\d+)/), prefix: str(/PREFIX\s*=\s*"([^"]*)"/, DEFAULT_CONFIG.prefix), port };
+      case "bun":
+        return { ...DEFAULT_CONFIG, acceptors: num(/(?:maxConnections|MAX_CONNECTIONS)\s*=\s*(\d+)/), prefix: str(/PREFIX\s*=\s*"([^"]*)"/, DEFAULT_CONFIG.prefix), port };
       case "odin":
         return { ...DEFAULT_CONFIG, acceptors: num(/THREADS\s*::\s*(\d+)/), prefix: str(/PREFIX\s*::\s*"([^"]*)"/, DEFAULT_CONFIG.prefix), port };
     }

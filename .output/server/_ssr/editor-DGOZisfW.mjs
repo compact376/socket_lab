@@ -1,8 +1,8 @@
 import { n as __toESM } from "../_runtime.mjs";
 import { n as require_react, t as Ft } from "../_libs/monaco-editor__react+react.mjs";
 import { n as require_jsx_runtime } from "../_libs/react+tanstack__react-query.mjs";
-import { c as resetSource, d as useLab, f as useSavedSource, l as saveSource, n as LanguageSelect, s as parseSource, u as setLab } from "./LabControls-AesVRdjq.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/editor-BC_wyZkP.js
+import { c as resetSource, d as useLab, f as useSavedSource, l as saveSource, n as LanguageSelect, s as parseSource, u as setLab } from "./LabControls-Cz2w7x1g.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/editor-DGOZisfW.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var RUNNER_URL = {
@@ -22,7 +22,8 @@ var RUNNER_URL = {
 var REPL_LANGUAGES = /* @__PURE__ */ new Set([
 	"elixir",
 	"python",
-	"nodejs"
+	"nodejs",
+	"bun"
 ]);
 function replUrl() {
 	return `${RUNNER_URL.replace(/^http/, "ws")}/api/repl`;
@@ -338,6 +339,7 @@ var MONACO_LANGUAGES = {
 	elixir: "elixir",
 	python: "python",
 	nodejs: "typescript",
+	bun: "typescript",
 	odin: "odin"
 };
 var fileNamePattern = /^[a-zA-Z0-9][a-zA-Z0-9._-]*$/;

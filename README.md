@@ -1,7 +1,7 @@
 # Wire Ingest Lab
 
 Deterministic, no-network simulator for following one TCP socket from the NIC
-through the Linux kernel and into Elixir, Python, Node.js, or Odin runtimes.
+through the Linux kernel and into Elixir, Python, Node.js, Bun, or Odin runtimes.
 Edit the source snippets, save them, and step through the resulting observer
 graph.
 
@@ -28,11 +28,12 @@ bun run editor-server
 ```
 
 The runner listens on `http://127.0.0.1:7777` and accepts `elixir`, `python`,
-`nodejs`, and `odin` requests. Local mode uses the corresponding installed
+`nodejs`, `bun`, and `odin` requests. Local mode uses the corresponding installed
 binary. Odin also checks `/home/dida/Odin/odin` in this environment; set
 `EDITOR_RUNNER_ODIN_PATH` to another executable when needed. Set
 `EDITOR_RUNNER_COMMAND=docker` to use the pinned images
-`elixir:1.18-alpine`, `python:3.12-alpine`, `node:22-alpine`, and
+`elixir:1.18-alpine`, `python:3.12-alpine`, `node:22-alpine`,
+`oven/bun:1.4-alpine`, and
 `odin:dev` (the images must already be available locally; build or retag an
 Odin image for your toolchain). Docker mode disables networking and applies
 CPU, memory, and PID limits.
@@ -40,7 +41,7 @@ CPU, memory, and PID limits.
 The runner API is `POST /api/run` with
 `{ language, files, entry, timeoutMs }`; timeout is clamped to 100 ms–30 s.
 `GET /health` reports each language's image and local/Docker availability.
-Elixir, Python, and Node.js support interactive terminals at
+Elixir, Python, Node.js, and Bun support interactive terminals at
 `ws://127.0.0.1:7777/api/repl`. The connection multiplexes independent
 session IDs. Create a REPL with
 `{ "type": "create", "sessionId": "python-1", "terminalType": "repl", "language": "python" }`,
@@ -54,7 +55,8 @@ resize, stop, close, and restart messages with the same `sessionId`.
 Input is forwarded unchanged to a Bun-native PTY, which provides terminal echo,
 editing, history, and control-key behavior. Each session has an independent
 process, working directory, output stream, and lifetime. Odin has no
-traditional REPL and remains run-file only.
+Bun uses `bun repl` for its interactive terminal. Odin has no traditional REPL
+and remains run-file only.
 
 The editor's terminal workspace provides tabs, independent REPL/shell
 sessions, minimize/restore, maximize/restore, horizontal and vertical splits,

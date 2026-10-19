@@ -2,7 +2,7 @@ import { n as __toESM } from "../_runtime.mjs";
 import { n as require_react } from "../_libs/monaco-editor__react+react.mjs";
 import { n as require_jsx_runtime } from "../_libs/react+tanstack__react-query.mjs";
 import { n as hierarchy, t as tree_default } from "../_libs/d3-hierarchy.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/ObserverGraph-8WsDs-a5.js
+//#region node_modules/.nitro/vite/services/ssr/assets/ObserverGraph-C4bzbfEl.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var n = (id, label, kind, detail, children) => ({
@@ -95,6 +95,9 @@ function nodejs(cfg) {
 		n("threadpool", "threadpool", "queue", "fs/dns/crypto only — not used for TCP reads.")
 	]);
 }
+function bun(cfg) {
+	return n("bun_runtime", "Bun runtime", "loop", "JavaScriptCore runtime with Bun's evented network server.", [n("bun_poll", "I/O event loop", "kernel", "Bun dispatches ready network events without blocking the JavaScript thread."), n("server", "Bun.serve", "worker", `HTTP/TCP server listening on port ${cfg.port}.`, [n("callbacks", "fetch callback", "loop", "Bun invokes the request handler and drains pending promises.", [n("socket", "Request", "handler", "Per-connection request data handled by the application.")])])]);
+}
 function odin(cfg) {
 	const threads = Array.from({ length: cfg.acceptors }, (_, i) => n(`thread_${i}`, `OS thread ${i}`, "worker", "Pool worker thread blocking in recv.", [n(`handler_${i}`, `handle_client`, "handler", "Owns the raw fd; defer net.close.")]));
 	return n("process", "process", "sup", "Native process; no runtime scheduler.", [n("listener", "listener fd", "worker", `TCP_Socket listening on ${cfg.port}.`, [n("accept_loop", "accept loop", "loop", "Main thread blocking in accept_tcp.")]), n("pool", "thread.Pool", "sup", `${cfg.acceptors} OS threads.`, threads)]);
@@ -103,6 +106,7 @@ var LAYOUTS = {
 	elixir,
 	python,
 	nodejs,
+	bun,
 	odin
 };
 function buildGraph(language, cfg) {

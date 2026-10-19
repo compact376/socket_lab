@@ -9,7 +9,7 @@ const shellEnabled = Bun.env.EDITOR_RUNNER_ALLOW_SHELL === "true";
 const workspaceRoot = Bun.env.EDITOR_RUNNER_WORKSPACE ?? process.cwd();
 const allowedFile = /^[a-zA-Z0-9][a-zA-Z0-9._-]*$/;
 
-const languages = ["elixir", "python", "nodejs", "odin"] as const;
+const languages = ["elixir", "python", "nodejs", "bun", "odin"] as const;
 type RunnerLanguage = (typeof languages)[number];
 type RunRequest = {
   language?: unknown;
@@ -23,6 +23,7 @@ const imageFor: Record<RunnerLanguage, string> = {
   elixir: "elixir:1.18-alpine",
   python: "python:3.12-alpine",
   nodejs: "node:22-alpine",
+  bun: "oven/bun:1.4-alpine",
   odin: "odin:dev",
 };
 
@@ -34,6 +35,7 @@ const localCommandFor: Record<RunnerLanguage, (entry: string) => string[]> = {
   elixir: (entry) => ["elixir", entry],
   python: (entry) => ["python3", entry],
   nodejs: (entry) => ["node", entry],
+  bun: (entry) => ["bun", entry],
   odin: (entry) => [odinBinary, "run", entry, "-file"],
 };
 
@@ -41,6 +43,7 @@ const localReplCommandFor: Record<ReplLanguage, string[]> = {
   elixir: ["iex"],
   python: ["python3", "-i"],
   nodejs: ["node", "-i"],
+  bun: ["bun", "repl"],
 };
 
 function originFor(origin: string | null): string {
@@ -74,7 +77,7 @@ function isLanguage(value: unknown): value is RunnerLanguage {
 }
 
 function isReplLanguage(value: unknown): value is ReplLanguage {
-  return value === "elixir" || value === "python" || value === "nodejs";
+  return value === "elixir" || value === "python" || value === "nodejs" || value === "bun";
 }
 
 function validRequest(
@@ -293,7 +296,7 @@ async function startSession(
   const language = request.language;
   if (request.terminalType === "repl" && !isReplLanguage(language)) {
     sendSession(ws, "error", sessionId, {
-      error: "REPL is available only for Elixir, Python, and Node.js",
+      error: "REPL is available only for Elixir, Python, Node.js, and Bun",
     });
     return;
   }

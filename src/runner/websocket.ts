@@ -4,12 +4,13 @@ import type {
   ReplMessage,
   ReplSize,
   TerminalType,
+  ReplLanguage,
 } from "./types";
 
 type CreateOptions = {
   sessionId: string;
   terminalType: TerminalType;
-  language?: "elixir" | "python" | "nodejs";
+  language?: ReplLanguage;
   cwd?: string;
   name?: string;
 };
@@ -60,7 +61,7 @@ export class ReplClient {
   }
 
   /** Compatibility helper for the original single-REPL editor flow. */
-  start(language: "elixir" | "python" | "nodejs", sessionId = "default"): void {
+  start(language: ReplLanguage, sessionId = "default"): void {
     this.create({ sessionId, terminalType: "repl", language, name: `${language} REPL` });
   }
 

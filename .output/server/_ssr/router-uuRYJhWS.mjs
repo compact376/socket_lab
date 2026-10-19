@@ -1,7 +1,7 @@
 import { n as require_jsx_runtime, t as QueryClientProvider } from "../_libs/react+tanstack__react-query.mjs";
 import { _ as createFileRoute, b as useRouter, d as Scripts, f as HeadContent, g as lazyRouteComponent, h as Outlet, m as createRouter, v as createRootRouteWithContext, y as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CZinFd2q.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-uuRYJhWS.js
 var import_jsx_runtime = require_jsx_runtime();
 var styles_default = "/assets/styles-C4Amhwyu.css";
 function NotFoundComponent() {
@@ -158,7 +158,7 @@ function RootComponent() {
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {})]
 	});
 }
-var $$splitComponentImporter$2 = () => import("./routes-CLvxr2Aw.mjs");
+var $$splitComponentImporter$2 = () => import("./routes-P9Y8_Qnc.mjs");
 var Route$2 = createFileRoute("/")({
 	head: () => ({ meta: [
 		{ title: "Wire Ingest Lab — follow one TCP socket from NIC to runtime" },
@@ -185,7 +185,7 @@ var Route$2 = createFileRoute("/")({
 	] }),
 	component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-var $$splitComponentImporter$1 = () => import("./editor-BC_wyZkP.mjs");
+var $$splitComponentImporter$1 = () => import("./editor-DGOZisfW.mjs");
 var Route$1 = createFileRoute("/editor")({
 	head: () => ({ meta: [
 		{ title: "Source editor — Wire Ingest Lab" },
@@ -212,7 +212,7 @@ var Route$1 = createFileRoute("/editor")({
 	] }),
 	component: lazyRouteComponent($$splitComponentImporter$1, "component")
 });
-var $$splitComponentImporter = () => import("./graph-wQcagpOO.mjs");
+var $$splitComponentImporter = () => import("./graph-C_kNvniN.mjs");
 var Route = createFileRoute("/graph")({
 	head: () => ({ meta: [
 		{ title: "Observer graph — Wire Ingest Lab" },

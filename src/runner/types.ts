@@ -1,6 +1,8 @@
 import type { Language } from "@/lib/pipeline/types";
 import type { SourceFiles } from "@/lib/source/files";
 
+export type ReplLanguage = Exclude<Language, "odin">;
+
 export type RunnerOutput = {
   stdout?: string;
   stderr?: string;
@@ -10,8 +12,8 @@ export type RunnerOutput = {
 };
 
 export type ReplMessage =
-  | { type: "started"; sessionId?: string; language: Exclude<Language, "odin">; command: string }
-  | { type: "created"; sessionId: string; terminalType: TerminalType; language?: Exclude<Language, "odin">; name?: string }
+  | { type: "started"; sessionId?: string; language: ReplLanguage; command: string }
+  | { type: "created"; sessionId: string; terminalType: TerminalType; language?: ReplLanguage; name?: string }
   | { type: "stdout" | "stderr" | "output"; sessionId?: string; data: string }
   | { type: "status"; sessionId?: string; data: string; status?: TerminalStatus }
   | { type: "error"; sessionId?: string; error: string }
@@ -24,7 +26,7 @@ export type TerminalSession = {
   id: string;
   name: string;
   type: TerminalType;
-  language?: Exclude<Language, "odin">;
+  language?: ReplLanguage;
   cwd: string;
   status: TerminalStatus;
   createdAt: number;

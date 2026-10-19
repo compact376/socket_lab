@@ -1,4 +1,4 @@
-export type Language = "elixir" | "python" | "nodejs" | "odin";
+export type Language = "elixir" | "python" | "nodejs" | "bun" | "odin";
 export type Outcome = "frame" | "close" | "error";
 export type Zone = "hardware" | "kernel" | "runtime" | "handler" | "outcome";
 
@@ -6,6 +6,7 @@ export const LANGUAGES: { id: Language; label: string; runtime: string }[] = [
   { id: "elixir", label: "Elixir", runtime: "Thousand Island · BEAM" },
   { id: "python", label: "Python", runtime: "asyncio · selectors" },
   { id: "nodejs", label: "Node.js", runtime: "V8 · libuv" },
+  { id: "bun", label: "Bun", runtime: "JavaScriptCore · libuv" },
   { id: "odin", label: "Odin", runtime: "native sockets · OS threads" },
 ];
 

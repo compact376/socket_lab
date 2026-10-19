@@ -5,7 +5,7 @@
     "binding": "ASSETS",
     "directory": "../public"
   },
-  "name": "tanstack-start-ts-networking-lab",
+  "name": "tanstack-start-ts",
   "compatibility_flags": [
     "nodejs_compat"
   ],

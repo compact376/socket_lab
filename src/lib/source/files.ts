@@ -165,6 +165,41 @@ export function parseFrame(line: string) {
 }
 `,
   },
+  bun: {
+    "server.ts": `import { serve } from "bun";
+import { parseFrame } from "./protocol";
+
+const PORT = 4000;
+const maxConnections = 100;
+const server = serve({
+  port: PORT,
+  fetch(req) {
+    return new Response(parseFrame(req.body ? "ECHO request" : "").body ?? "ERR bad_frame\\n");
+  },
+});
+
+console.log(\`listening on \${server.port}\`);
+`,
+    "event_loop.ts": `// Bun runs JavaScript with JavaScriptCore and an evented I/O loop.
+// Network readiness is handled without blocking the JavaScript thread.
+`,
+    "handler.ts": `import { parseFrame } from "./protocol";
+
+export function handle(line: string): string {
+  const result = parseFrame(line);
+  return result.ok ? result.body : "ERR bad_frame\\n";
+}
+`,
+    "protocol.ts": `export const PREFIX = "ECHO ";
+
+export function parseFrame(line: string) {
+  if (line.startsWith(PREFIX) && line.slice(PREFIX.length).length > 0) {
+    return { ok: true as const, body: line.slice(PREFIX.length) };
+  }
+  return { ok: false as const, error: "bad_frame" };
+}
+`,
+  },
   odin: {
     "main.odin": `package wire_ingest
 

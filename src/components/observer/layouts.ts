@@ -67,6 +67,17 @@ function nodejs(cfg: SourceConfig): GraphNode {
   ]);
 }
 
+function bun(cfg: SourceConfig): GraphNode {
+  return n("bun_runtime", "Bun runtime", "loop", "JavaScriptCore runtime with Bun's evented network server.", [
+    n("bun_poll", "I/O event loop", "kernel", "Bun dispatches ready network events without blocking the JavaScript thread."),
+    n("server", "Bun.serve", "worker", `HTTP/TCP server listening on port ${cfg.port}.`, [
+      n("callbacks", "fetch callback", "loop", "Bun invokes the request handler and drains pending promises.", [
+        n("socket", "Request", "handler", "Per-connection request data handled by the application."),
+      ]),
+    ]),
+  ]);
+}
+
 function odin(cfg: SourceConfig): GraphNode {
   const threads = Array.from({ length: cfg.acceptors }, (_, i) =>
     n(`thread_${i}`, `OS thread ${i}`, "worker", "Pool worker thread blocking in recv.", [
@@ -79,7 +90,7 @@ function odin(cfg: SourceConfig): GraphNode {
   ]);
 }
 
-const LAYOUTS: Record<Language, (c: SourceConfig) => GraphNode> = { elixir, python, nodejs, odin };
+const LAYOUTS: Record<Language, (c: SourceConfig) => GraphNode> = { elixir, python, nodejs, bun, odin };
 
 export function buildGraph(language: Language, cfg: SourceConfig): GraphNode {
   return kernelBranch(LAYOUTS[language](cfg));

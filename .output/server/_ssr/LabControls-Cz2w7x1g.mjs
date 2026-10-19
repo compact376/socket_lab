@@ -1,7 +1,7 @@
 import { n as __toESM } from "../_runtime.mjs";
 import { n as require_react } from "../_libs/monaco-editor__react+react.mjs";
 import { n as require_jsx_runtime } from "../_libs/react+tanstack__react-query.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/LabControls-AesVRdjq.js
+//#region node_modules/.nitro/vite/services/ssr/assets/LabControls-Cz2w7x1g.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var DEFAULT_CONFIG = {
@@ -399,6 +399,14 @@ function nodejsSteps(payload, outcome, cfg) {
 	}];
 	return build("nodejs", cfg, [...drafts, ...tail]);
 }
+/** Bun uses the same evented socket model as Node, with Bun's JavaScriptCore runtime. */
+function bunSteps(payload, outcome, cfg) {
+	return nodejsSteps(payload, outcome, cfg).map((step) => ({
+		...step,
+		language: "bun",
+		explanation: step.explanation.replace(/Node|V8|libuv/g, (term) => term === "Node" ? "Bun" : term === "V8" ? "JavaScriptCore" : "libuv")
+	}));
+}
 function odinSteps(payload, outcome, cfg) {
 	const { body, valid } = outcomeTail(payload, cfg);
 	const msg = JSON.stringify(payload);
@@ -705,6 +713,11 @@ var LANGUAGES = [
 		runtime: "V8 · libuv"
 	},
 	{
+		id: "bun",
+		label: "Bun",
+		runtime: "JavaScriptCore · libuv"
+	},
+	{
 		id: "odin",
 		label: "Odin",
 		runtime: "native sockets · OS threads"
@@ -719,6 +732,7 @@ var DISPATCH = {
 	elixir: elixirSteps,
 	python: pythonSteps,
 	nodejs: nodejsSteps,
+	bun: bunSteps,
 	odin: odinSteps
 };
 function stepsForLanguage(language, payload, outcome, sourceConfig) {
@@ -753,6 +767,12 @@ function parseSource(language, files) {
 				port
 			};
 			case "nodejs": return {
+				...DEFAULT_CONFIG,
+				acceptors: num(/maxConnections\s*=\s*(\d+)/),
+				prefix: str(/PREFIX\s*=\s*"([^"]*)"/, DEFAULT_CONFIG.prefix),
+				port
+			};
+			case "bun": return {
 				...DEFAULT_CONFIG,
 				acceptors: num(/maxConnections\s*=\s*(\d+)/),
 				prefix: str(/PREFIX\s*=\s*"([^"]*)"/, DEFAULT_CONFIG.prefix),
@@ -931,6 +951,40 @@ export function parseFrame(line: string) {
 }
 `
 	},
+	bun: {
+		"server.ts": `import { serve } from "bun";
+import { parseFrame } from "./protocol";
+
+const PORT = 4000;
+const server = serve({
+  port: PORT,
+  fetch(req) {
+    return new Response(parseFrame(req.body ? "ECHO request" : "").body ?? "ERR bad_frame\\n");
+  },
+});
+
+console.log(\`listening on \${server.port}\`);
+`,
+		"event_loop.ts": `// Bun runs JavaScript with JavaScriptCore and an evented I/O loop.
+// Network readiness is handled without blocking the JavaScript thread.
+`,
+		"handler.ts": `import { parseFrame } from "./protocol";
+
+export function handle(line: string): string {
+  const result = parseFrame(line);
+  return result.ok ? result.body : "ERR bad_frame\\n";
+}
+`,
+		"protocol.ts": `export const PREFIX = "ECHO ";
+
+export function parseFrame(line: string) {
+  if (line.startsWith(PREFIX) && line.slice(PREFIX.length).length > 0) {
+    return { ok: true as const, body: line.slice(PREFIX.length) };
+  }
+  return { ok: false as const, error: "bad_frame" };
+}
+`
+	},
 	odin: {
 		"main.odin": `package wire_ingest
 
@@ -1054,7 +1108,7 @@ function ensure() {
 			state = {
 				...DEFAULT,
 				payload: typeof saved.payload === "string" ? saved.payload : DEFAULT.payload,
-				language: language === "elixir" || language === "python" || language === "nodejs" || language === "odin" ? language : DEFAULT.language,
+				language: language === "elixir" || language === "python" || language === "nodejs" || language === "bun" || language === "odin" ? language : DEFAULT.language,
 				outcome: outcome === "frame" || outcome === "close" || outcome === "error" ? outcome : DEFAULT.outcome
 			};
 		}

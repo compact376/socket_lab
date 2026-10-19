@@ -21,7 +21,7 @@ export const Route = createFileRoute("/editor")({
   head: () => ({
     meta: [
       { title: "Source editor — Wire Ingest Lab" },
-      { name: "description", content: "Edit the educational Elixir, Python, Node.js and Odin sources that drive the socket simulation, and run them in the local Bun runner." },
+      { name: "description", content: "Edit the educational Elixir, Python, Node.js, Bun and Odin sources that drive the socket simulation, and run them in the local Bun runner." },
       { property: "og:title", content: "Source editor — Wire Ingest Lab" },
       { property: "og:description", content: "Multi-file workspace with local Bun runner execution." },
       { property: "og:type", content: "website" },
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/editor")({
   component: EditorPage,
 });
 
-const MONACO_LANGUAGES: Record<Language, string> = { elixir: "elixir", python: "python", nodejs: "typescript", odin: "odin" };
+const MONACO_LANGUAGES: Record<Language, string> = { elixir: "elixir", python: "python", nodejs: "typescript", bun: "typescript", odin: "odin" };
 const fileNamePattern = /^[a-zA-Z0-9][a-zA-Z0-9._-]*$/;
 
 function configureMonaco(monaco: typeof Monaco) {
@@ -171,7 +171,7 @@ function EditorPage() {
       },
     });
     replClient.current = client;
-    client.start(language as "elixir" | "python" | "nodejs");
+    client.start(language as "elixir" | "python" | "nodejs" | "bun");
   };
   const addFile = () => {
     const name = window.prompt("New file name (letters, numbers, ., _, -):", "untitled.txt")?.trim();

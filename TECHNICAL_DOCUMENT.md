@@ -7,11 +7,12 @@
 ## 1. System purpose and boundaries
 
 Wire Ingest Lab is an educational simulator for following one conceptual TCP
-connection through four runtime models:
+connection through five runtime models:
 
 - Elixir/BEAM and Thousand Island
 - Python/asyncio
 - Node.js/libuv
+- Bun/JavaScriptCore and evented I/O
 - Odin/native threads
 
 The browser simulation is deterministic. It does not open sockets, connect to
@@ -150,6 +151,7 @@ The current language IDs are:
 | Elixir | `elixir` |
 | Python | `python` |
 | Node.js | `typescript` |
+| Bun | `typescript` |
 | Odin | `odin` |
 
 Odin is registered at Monaco startup with a Monarch tokenizer covering
@@ -212,7 +214,7 @@ Required fields:
 
 | Field | Type | Rules |
 |---|---|---|
-| `language` | string | `elixir`, `python`, `nodejs`, or `odin` |
+| `language` | string | `elixir`, `python`, `nodejs`, `bun`, or `odin` |
 | `files` | object | Simple file names mapped to source strings |
 | `entry` | string | Must be a submitted file and a simple file name |
 | `timeoutMs` | number | Clamped to 100–30,000 ms; defaults to 10,000 |
@@ -247,7 +249,8 @@ connection opens, the browser sends:
 { "type": "start", "language": "python" }
 ```
 
-Elixir starts `iex`, Python starts `python3 -i`, and Node.js starts `node -i`.
+Elixir starts `iex`, Python starts `python3 -i`, Node.js starts `node -i`, and
+Bun starts `bun repl`.
 Odin is intentionally rejected because it has no traditional REPL. Input is
 forwarded unchanged with `{ "type": "input", "data": "print(1 + 1)\r" }`;
 stopping sends `{ "type": "stop" }`. A terminal resize can be sent as
@@ -293,6 +296,7 @@ terminal view without sending that control character to the REPL.
 | Elixir | `elixir <entry>` | `elixir:1.18-alpine` | `elixir <entry>` |
 | Python | `python3 <entry>` | `python:3.12-alpine` | `python <entry>` |
 | Node.js | `node <entry>` | `node:22-alpine` | `node <entry>` |
+| Bun | `bun <entry>` | `oven/bun:1.4-alpine` | `bun <entry>` |
 | Odin | `<odin> run <entry> -file` | `odin:dev` | `odin run <entry> -file` |
 
 The Odin executable is selected in this order:

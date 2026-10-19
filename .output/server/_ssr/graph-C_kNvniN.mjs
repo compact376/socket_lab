@@ -1,7 +1,7 @@
 import { n as require_jsx_runtime } from "../_libs/react+tanstack__react-query.mjs";
-import { a as Timeline, i as StepDetail, n as LanguageSelect, o as Transport, p as useSimulation } from "./LabControls-AesVRdjq.mjs";
-import { t as ObserverGraph } from "./ObserverGraph-8WsDs-a5.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/graph-wQcagpOO.js
+import { a as Timeline, i as StepDetail, n as LanguageSelect, o as Transport, p as useSimulation } from "./LabControls-Cz2w7x1g.mjs";
+import { t as ObserverGraph } from "./ObserverGraph-C4bzbfEl.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/graph-C_kNvniN.js
 var import_jsx_runtime = require_jsx_runtime();
 function GraphPage() {
 	const sim = useSimulation();

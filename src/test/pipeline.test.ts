@@ -21,6 +21,15 @@ describe("pipeline", () => {
     expect(parseSource("elixir", {}).acceptors).toBe(10);
     expect(parseSource("elixir", null).acceptors).toBe(10);
   });
+  it("parses Bun defaults from Bun source", () => {
+    const config = parseSource("bun", {
+      "server.ts": `const PORT = 4321; server.maxConnections = 24;`,
+      "protocol.ts": `export const PREFIX = "PING ";`,
+    });
+    expect(config.port).toBe(4321);
+    expect(config.acceptors).toBe(24);
+    expect(config.prefix).toBe("PING ");
+  });
   it("elixir graph has one acceptor branch per configured acceptor (no minimum of 2)", () => {
     const g = JSON.stringify(buildGraph("elixir", parseSource("elixir", { a: "num_acceptors: 1" })));
     expect(g.match(/"id":"acceptor_\d+"/g)).toHaveLength(1);
